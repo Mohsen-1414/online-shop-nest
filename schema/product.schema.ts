@@ -2,7 +2,7 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Date, Document} from 'mongoose';
 
 
-export type ProductDocumnet = Product & Document ;
+export type ProductDocument = Product & Document ;
 
 @Schema()
 export class Product {
