@@ -20,13 +20,14 @@ export class Product {
     @Prop({ required: true})
     image: string
 
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'Category' }] })
+    @Prop({ type: Types.ObjectId, ref: 'Category' })
     category: string
+
 
     @Prop({ required: true, default: 0 })
     countInStock: number;
 
-    @Prop({ type: [{type:Types.ObjectId, ref:'User'}]})
+    @Prop({ type: Types.ObjectId, ref: 'User' })
     userId: User
 
 };

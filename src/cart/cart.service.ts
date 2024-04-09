@@ -66,33 +66,33 @@ export class CartService {
         await this.cartModel.deleteOne({ userId }).exec();
     }
 
-    // async generateCartPdf(userId: string): Promise<void> {
-    //   const cart = await this.cartModel.findOne({ userId }).populate('items.productId').exec();
+    async generateCartPdf(userId: string): Promise<void> {
+      const cart = await this.cartModel.findOne({ userId }).populate('items.productId').exec();
   
-    //   if (!cart) {
-    //       throw new NotFoundException('Cart not found');
-    //   }
+      if (!cart) {
+          throw new NotFoundException('Cart not found');
+      }
   
-    //   const doc = new PDFDocument();
-    //   const outputPath = cart_${userId}.pdf;
-    //   const outputStream = fs.createWriteStream(outputPath);
-    //   doc.pipe(outputStream);
+      const doc = new PDFDocument();
+      const outputPath = cart_${userId}.pdf;
+      const outputStream = fs.createWriteStream(outputPath);
+      doc.pipe(outputStream);
   
-    //   doc.fontSize(14).text(User ID: ${userId}, { align: 'center' });
-    //   doc.moveDown();
-    //   doc.fontSize(20).text('Your Cart:', { align: 'center' });
-    //   doc.moveDown();
+      doc.fontSize(14).text(User ID: ${userId}, { align: 'center' });
+      doc.moveDown();
+      doc.fontSize(20).text('Your Cart:', { align: 'center' });
+      doc.moveDown();
   
-    //   for (let i = 0; i < cart.items.length; i++) {
-    //       const item = cart.items[i];
-    //       const product = item.productId; // Assuming productId is the reference to the product
+      for (let i = 0; i < cart.items.length; i++) {
+          const item = cart.items[i];
+          const product = item.productId; // Assuming productId is the reference to the product
   
-          // doc.fontSize(14).text(Item ${i + 1}: ${product.title}, { continued: true });
-          // doc.text(Price: ${product.price});
-          // doc.moveDown();
-  //     }
+          doc.fontSize(14).text(Item ${i + 1}: ${product.title}, { continued: true });
+          doc.text(Price: ${product.price});
+          doc.moveDown();
+      }
   
-  //     doc.end();
-  // }
+      doc.end();
+  }
   
 }
