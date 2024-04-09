@@ -1,30 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Product, ProductDocument } from 'schema/product.schema';
+import { Product, ProductDocument } from 'src/product/schema/product.schema';
 import { FilterProductDTO } from './dto/filter.product.dto';
 import { CreateProductDTO } from './dto/create.product.dto';
 
 @Injectable()
 export class ProductsService {
     constructor(@InjectModel('Product') private readonly productModel: Model< ProductDocument >) { }
-
-  async getFilteredProducts(filterProductDTO: FilterProductDTO): Promise<Product[]> {
-    const { category, search } = filterProductDTO;
-    let products = await this.getAllProducts();
-
-    if (search) {
-      products = products.filter(product => 
-        product.title.includes(search) ||
-        product.description.includes(search)
-      );
-    }
-
-    if (category) {
-      products = products.filter(product => product.category.includes(category))
-    }
-    return products;
-  }
 
   async getAllProducts(): Promise<Product[]> {
     const products = await this.productModel.find().exec();
@@ -51,4 +34,28 @@ export class ProductsService {
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
     return deletedProduct;
   }
+
+  async getFilteredProducts(filterProductDTO:FilterProductDTO): Promise<Product[]> {
+    const { category, search } = filterProductDTO;
+
+    let query = {};
+
+    if (search) {
+      query = {
+        ...query,
+        $or: [
+          { title: { $regex: new RegExp(search, 'i') } },
+          { description: { $regex: new RegExp(search, 'i') } },
+        ],
+      };
+    }
+
+    if (category) {
+      query = { ...query, category };
+    }
+
+    const products = await this.productModel.find(query).exec();
+    return products;
+  }
 }
+

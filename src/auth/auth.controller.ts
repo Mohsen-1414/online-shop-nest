@@ -30,6 +30,7 @@ export class AuthController {
     @Roles(Role.User)
     @Get('/user')
         async getProfile(@Request() req){
+            console.log('I am here ');
             return req.user;
         };
 

@@ -14,12 +14,14 @@ export class AuthService {
             if(user && isPasswordMatch){
                 return user;
             }
-            return 'Not correct info';
+            return null;
         };
 
         async login(user: any){
-            const payload = {username: user.username, sub: user._id, roles: user.roles};
+            const payload = {username: user.username, sub: user._id, roles: ['user']};
             return{ access_token : this.jwtService.sign(payload)}
-        }
+        };
+
+        
     
 }

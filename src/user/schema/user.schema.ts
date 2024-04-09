@@ -6,7 +6,9 @@ import { Role } from 'src/auth/enum/role.enum';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({
+    timestamps: true
+})
 
 export class User {
 
@@ -18,13 +20,16 @@ export class User {
     @IsNotEmpty()
     password: string
 
-    @Prop({ type: String, unique: true })
+    @Prop({ type: String, unique: [true, 'Duplicate email, please provide another email '] })
     @IsNotEmpty()
     @IsEmail()
     email: string
 
     @Prop()
     roles: Role[];
+
+    @Prop()
+    verificationToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
